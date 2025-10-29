@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construa sua Casa Financiada - Angularity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1f2937; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .container-wide { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+        .hero { background: linear-gradient(135deg, #154056 0%, #0d5a7f 100%); min-height: 90vh; display: flex; align-items: center; padding: 60px 0; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; right: -10%; top: 0; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03)); pointer-events: none; }
+        .hero-content { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
+        .hero-text h1 { font-size: 48px; font-weight: 800; color: white; margin-bottom: 20px; line-height: 1.2; }
+        .hero-text h2 { font-size: 32px; font-weight: 600; color: white; margin-bottom: 32px; line-height: 1.3; }
+        .hero-bullets { list-style: none; margin-bottom: 32px; }
+        .hero-bullets li { font-size: 16px; color: white; margin-bottom: 12px; padding-left: 32px; position: relative; }
+        .hero-bullets li::before { content: '✓'; position: absolute; left: 0; color: #22c55e; font-weight: bold; font-size: 20px; }
+        .hero-images { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; height: 100%; }
+        .hero-image-item { border-radius: 12px; background: linear-gradient(135deg, #6366f1, #8b5cf6); min-height: 200px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); background-size: cover; background-position: center; }
+        .hero-image-1 { grid-column: 1 / 3; }
+        .hero-image-2 { }
+        .hero-image-3 { }
+        .form-card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 32px; backdrop-filter: blur(10px); margin-top: 8px; }
+        .form-card-title { font-size: 16px; font-weight: 700; color: #2ECC71; text-align: center; margin-bottom: 8px; line-height: 1.4; }
+        .form-card h3 { font-size: 14px; color: white; text-align: center; margin-bottom: 24px; line-height: 1.4; }
+        .form-group { margin-bottom: 20px; }
+        .form-group input { width: 100%; height: 48px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.95); border-radius: 8px; padding: 0 16px; font-size: 16px; font-family: inherit; transition: all 0.3s; }
+        .form-group input:focus { outline: none; border-color: #22c55e; background: white; }
+        .form-group input::placeholder { color: #6b7280; }
+        .btn-primary { width: 100%; height: 56px; background: #22c55e; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer; transition: background 0.3s; font-family: inherit; }
+        .btn-primary:hover { background: #16a34a; }
+        .segmentation { padding: 80px 0; background: white; }
+        .section-title { font-size: 36px; font-weight: 700; text-align: center; color: #1f2937; margin-bottom: 48px; }
+        .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; margin-bottom: 40px; }
+        .card { background: white; border: 2px solid #154056; border-radius: 12px; padding: 32px; transition: transform 0.3s, box-shadow 0.3s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(21, 64, 86, 0.15); }
+        .card h3 { font-size: 20px; font-weight: 700; color: #154056; margin-bottom: 16px; }
+        .card p { font-size: 16px; color: #4b5563; line-height: 1.6; }
+        .card p strong { color: #1f2937; }
+        .btn-secondary { display: inline-block; padding: 16px 48px; background: #22c55e; color: white; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 18px; transition: background 0.3s; margin: 0 auto; display: block; width: fit-content; }
+        .btn-secondary:hover { background: #16a34a; }
+        .social-proof { background: linear-gradient(135deg, #154056 0%, #0d5a7f 100%); padding: 80px 0; color: white; }
+        .social-proof h2 { font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 16px; }
+        .social-proof h3 { font-size: 24px; font-weight: 500; text-align: center; margin-bottom: 40px; }
+        .testimonials-carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding: 20px 0; margin-bottom: 40px; scrollbar-width: none; -ms-overflow-style: none; }
+        .testimonials-carousel::-webkit-scrollbar { display: none; }
+        .testimonial-item { min-width: 100%; scroll-snap-align: center; flex-shrink: 0; }
+        .testimonial-item img { width: 100%; height: auto; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        .carousel-dots { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; }
+        .carousel-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: background 0.3s; }
+        .carousel-dot.active { background: white; }
+        @media (min-width: 969px) {
+            .testimonial-item { min-width: calc(33.333% - 14px); }
+            .testimonials-carousel { scroll-snap-type: none; }
+        }
+        .comparison { padding: 100px 0; background: white; }
+        .comparison-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+        .comparison-column { border-radius: 12px; padding: 32px; border: 2px solid; }
+        .comparison-column.good { background: #f0fdf4; border-color: #22c55e; }
+        .comparison-column.bad-red { background: #fef2f2; border-color: #ef4444; }
+        .comparison-column.bad-orange { background: #fff7ed; border-color: #f97316; }
+        .comparison-column h3 { font-size: 24px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+        .comparison-column.good h3 { color: #16a34a; }
+        .comparison-column.bad-red h3 { color: #dc2626; }
+        .comparison-column.bad-orange h3 { color: #ea580c; }
+        .comparison-column ul { list-style: none; }
+        .comparison-column li { font-size: 15px; line-height: 1.7; margin-bottom: 12px; padding-left: 28px; position: relative; }
+        .comparison-column.good li::before { content: '✓'; position: absolute; left: 0; color: #16a34a; font-weight: bold; }
+        .comparison-column.bad-red li::before, .comparison-column.bad-orange li::before { content: '✗'; position: absolute; left: 0; font-weight: bold; }
+        .comparison-column.bad-red li::before { color: #dc2626; }
+        .comparison-column.bad-orange li::before { color: #ea580c; }
+        .cases { padding: 80px 0; background: #f9fafb; }
+        .cases-carousel-wrapper { position: relative; max-width: 1200px; margin: 0 auto 20px; padding: 60px 0; }
+        .cases-carousel { display: flex; align-items: center; justify-content: center; position: relative; height: 500px; }
+        .carousel-item { position: absolute; transition: all 0.5s ease; cursor: pointer; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.3); width: 600px; height: 400px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+        .carousel-item.active { transform: scale(1) translateX(0); z-index: 3; opacity: 1; }
+        .carousel-item.left { transform: scale(0.85) translateX(-450px) rotateY(10deg); z-index: 2; opacity: 0.7; }
+        .carousel-item.right { transform: scale(0.85) translateX(450px) rotateY(-10deg); z-index: 2; opacity: 0.7; }
+        .carousel-item.hidden { transform: scale(0.7) translateX(0); z-index: 1; opacity: 0; }
+        .carousel-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 32px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+        .carousel-overlay h3 { font-size: 24px; font-weight: 700; color: white; }
+        .cases-dots { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; }
+        .cases-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(21, 64, 86, 0.3); cursor: pointer; transition: background 0.3s; }
+        .cases-dot.active { background: #154056; width: 32px; border-radius: 6px; }
+        @media (max-width: 968px) {
+            .cases-carousel { height: 400px; }
+            .carousel-item { width: 90%; max-width: 400px; height: 300px; }
+            .carousel-item.active { transform: scale(1) translateX(0); }
+            .carousel-item.left { transform: scale(0.8) translateX(-100%) rotateY(0deg); opacity: 0; }
+            .carousel-item.right { transform: scale(0.8) translateX(100%) rotateY(0deg); opacity: 0; }
+            .carousel-overlay h3 { font-size: 18px; padding: 20px; }
+        }
+        .process { padding: 100px 0; background: white; }
+        .process-subtitle { font-size: 24px; font-weight: 500; text-align: center; color: #4b5563; margin-top: -32px; margin-bottom: 48px; }
+        .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .process-card { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 32px; text-align: center; transition: transform 0.3s, border-color 0.3s; }
+        .process-card:hover { transform: translateY(-4px); border-color: #154056; }
+        .process-icon { font-size: 48px; margin-bottom: 16px; }
+        .process-card h3 { font-size: 20px; font-weight: 700; color: #154056; margin-bottom: 12px; }
+        .process-card p { font-size: 15px; color: #4b5563; line-height: 1.6; }
+        .about { padding: 80px 0; background: linear-gradient(135deg, #154056 0%, #0d5a7f 100%); color: white; }
+        .about-grid { display: grid; grid-template-columns: 60% 40%; gap: 60px; align-items: center; }
+        .about-images { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .about-image { aspect-ratio: 4/5; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        .about-text h2 { font-size: 32px; font-weight: 700; margin-bottom: 24px; }
+        .about-text p { font-size: 16px; line-height: 1.8; color: rgba(255,255,255,0.9); margin-bottom: 20px; }
+        .final-cta { padding: 80px 0; background: #f9fafb; text-align: center; }
+        .final-cta h2 { font-size: 32px; font-weight: 700; margin-bottom: 16px; }
+        .final-cta p { font-size: 18px; color: #4b5563; line-height: 1.7; max-width: 700px; margin: 0 auto 32px; }
+        .btn-blue { display: inline-block; padding: 16px 48px; background: #22c55e; color: white; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 18px; transition: background 0.3s; }
+        .btn-blue:hover { background: #16a34a; }
+        footer { background: #1f2937; color: rgba(255,255,255,0.7); padding: 40px 0 20px; text-align: center; }
+        footer p { font-size: 14px; }
+        @media (max-width: 968px) {
+            .hero-content { grid-template-columns: 1fr; gap: 40px; }
+            .hero-text h1 { font-size: 32px; }
+            .hero-text h2 { font-size: 24px; }
+            .hero-images { grid-template-columns: 1fr; gap: 12px; }
+            .hero-image-1 { grid-column: 1; min-height: 250px; }
+            .hero-image-2, .hero-image-3 { min-height: 180px; }
+            .form-card { padding: 24px; }
+            .cards-grid, .comparison-grid, .process-grid { grid-template-columns: 1fr; }
+            .about-grid { grid-template-columns: 1fr; }
+            .about-images { grid-template-columns: 1fr; }
+            .section-title { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Com renda comprovada, você já pode conquistar a casa dos sonhos</h1>
+                    <h2>Aprovamos seu crédito e construímos no seu lote</h2>
+                    <ul class="hero-bullets">
+                        <li>Disponível para <strong>CLT, MEI, autônomos e empresários</strong></li>
+                        <li><strong>Ajuda do Governo (subsídio) de até R$ 55 mil</strong> — reduz <strong>entrada/parcelas</strong> (se você se enquadrar)</li>
+                        <li><strong>Cuidamos de tudo:</strong> crédito, <strong>projetos</strong> e <strong>construção</strong></li>
+                        <li><strong>Simulação e orçamento 100% transparentes</strong></li>
+                    </ul>
+                    <div class="form-card" id="formulario">
+                        <p class="form-card-title">Preencha e descubra em 2 minutos como é simples ter a casa dos sonhos no seu lote</p>
+                        <form>
+                            <div class="form-group"><input type="text" placeholder="Nome completo" required></div>
+                            <div class="form-group"><input type="tel" placeholder="WhatsApp" required></div>
+                            <div class="form-group"><input type="email" placeholder="E-mail" required></div>
+                            <button type="submit" class="btn-primary">Solicitar simulação grátis →</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="hero-images">
+                    <div class="hero-image-item hero-image-1"></div>
+                    <div class="hero-image-item hero-image-2"></div>
+                    <div class="hero-image-item hero-image-3"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="segmentation">
+        <div class="container">
+            <h2 class="section-title">Seu sonho da casa própria tá mais próximo do que você imagina</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>Está pagando um lote?</h3>
+                    <p>Fazemos novo financiamento para quitar seu lote e construir sua casa. Na prática, você troca o boleto do lote pela prestação da casa.</p>
+                </div>
+                <div class="card">
+                    <h3>Já tem o lote quitado?</h3>
+                    <p><strong>Financiamos até 100% do valor da construção</strong> da sua casa.</p>
+                </div>
+            </div>
+            <a href="#formulario" class="btn-secondary">Construir no meu lote! →</a>
+        </div>
+    </section>
+
+    <section class="social-proof">
+        <div class="container">
+            <h2>+100 famílias em Goiânia e região financiaram e construíram com a Angularity</h2>
+            <h3>Veja alguns depoimentos reais:</h3>
+            <div class="testimonials-carousel">
+                <div class="testimonial-item">
+                    <img src="depoimento1.png.PNG" alt="Depoimento 1">
+                </div>
+                <div class="testimonial-item">
+                    <img src="depoimento2.png.PNG" alt="Depoimento 2">
+                </div>
+                <div class="testimonial-item">
+                    <img src="depoimento3.png.PNG" alt="Depoimento 3">
+                </div>
+            </div>
+            <div class="carousel-dots">
+                <span class="carousel-dot active"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+            </div>
+            <a href="#formulario" class="btn-secondary">Solicitar meu projeto →</a>
+        </div>
+    </section>
+
+    <section class="comparison">
+        <div class="container-wide">
+            <h2 class="section-title">Construir com a Angularity é mais rápido, econômico e seguro</h2>
+            <div class="comparison-grid">
+                <div class="comparison-column good">
+                    <h3><span>✅</span> Com a Angularity</h3>
+                    <ul>
+                        <li><strong>Você usa o dinheiro do banco</strong> — economiza dinheiro próprio</li>
+                        <li><strong>Aprovação ágil</strong> — dominamos o processo de financiamento</li>
+                        <li><strong>Parcelas do financiamento só após a entrega da casa pronta</strong></li>
+                        <li><strong>Pode utilizar seu FGTS</strong> pra reduzir o valor das parcelas</li>
+                        <li><strong>Padrão de qualidade</strong> com engenharia e tecnologia</li>
+                        <li><strong>Garantia estendida de 5 anos</strong></li>
+                    </ul>
+                </div>
+                <div class="comparison-column bad-red">
+                    <h3><span>❌</span> Por conta própria</h3>
+                    <ul>
+                        <li>Você paga <strong>tudo do seu bolso</strong></li>
+                        <li><strong>Obra para no meio</strong> por falta de dinheiro</li>
+                        <li><strong>Sem prazo real</strong> — demora anos pra terminar</li>
+                        <li><strong>Dor de cabeça</strong> com mão de obra e material</li>
+                        <li>Sem controle - Pedreiro faz o que vier na cabeça</li>
+                        <li><strong>Sem garantia</strong> — defeito é problema seu</li>
+                    </ul>
+                </div>
+                <div class="comparison-column bad-orange">
+                    <h3><span>❌</span> Outras construtoras</h3>
+                    <ul>
+                        <li>Você paga do bolso — maioria não domina financiamento</li>
+                        <li>Não resolvem o financiamento — você precisa conseguir o dinheiro sozinho</li>
+                        <li>Você paga adiantado — desembolso alto antes de começar</li>
+                        <li>Atrasos constantes — sem compromisso real com prazo</li>
+                        <li>Qualidade média — sem tecnologia moderna</li>
+                        <li>Nem sempre oferecem garantia</li>
+                    </ul>
+                </div>
+            </div>
+            <a href="#formulario" class="btn-secondary" style="margin-top: 48px;">Construir com a Angularity →</a>
+        </div>
+    </section>
+
+    <section class="cases">
+        <div class="container">
+            <h2 class="section-title">A Angularity transforma sonhos em realidade</h2>
+            <div class="cases-carousel-wrapper">
+                <div class="cases-carousel">
+                    <div class="carousel-item active" data-index="0">
+                        <img src="case1.jpg" alt="Case 1" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="carousel-overlay"><h3>Realizada com apenas 5% de entrada</h3></div>
+                    </div>
+                    <div class="carousel-item right" data-index="1">
+                        <img src="case2.jpg" alt="Case 2" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="carousel-overlay"><h3>Casa construída no condomínio Jardins Capri</h3></div>
+                    </div>
+                    <div class="carousel-item hidden" data-index="2">
+                        <img src="case3.jpg" alt="Case 3" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="carousel-overlay"><h3>Casa financiada pela Caixa Econômica Federal</h3></div>
+                    </div>
+                    <div class="carousel-item hidden" data-index="3">
+                        <img src="case4.jpg" alt="Case 4" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="carousel-overlay"><h3>Só R$ 60 mil do bolso — o banco financiou o resto</h3></div>
+                    </div>
+                </div>
+            </div>
+            <div class="cases-dots">
+                <span class="cases-dot active" data-index="0"></span>
+                <span class="cases-dot" data-index="1"></span>
+                <span class="cases-dot" data-index="2"></span>
+                <span class="cases-dot" data-index="3"></span>
+            </div>
+            <a href="#formulario" class="btn-secondary">Solicitar meu projeto →</a>
+        </div>
+    </section>
+
+    <section class="process">
+        <div class="container">
+            <h2 class="section-title">A Angularity cuida de cada detalhe</h2>
+            <p class="process-subtitle">Do crédito a entrega da casa pronta</p>
+            <div class="process-grid">
+                <div class="process-card">
+                    <div class="process-icon">💳</div>
+                    <h3>Aprovação de Crédito</h3>
+                    <p>Financiamento rápido e seguro com bancos parceiros.</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-icon">📐</div>
+                    <h3>Projeto Personalizado</h3>
+                    <p>Time de arquitetura define o projeto junto com você.</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-icon">🏗️</div>
+                    <h3>Construção da Casa</h3>
+                    <p>Projetos e obra completa com qualidade e tecnologia.</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-icon">✅</div>
+                    <h3>Entrega no Prazo</h3>
+                    <p>+de 100 casas entregues sem atraso — garantia de 5 anos</p>
+                </div>
+            </div>
+            <a href="#formulario" class="btn-secondary" style="margin-top: 48px;">Garanta sua casa! →</a>
+        </div>
+    </section>
+
+    <section class="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h2>Conheça a Angularity</h2>
+                    <p>Com financiamento e construção, já ajudamos mais de 100 famílias a construírem a casa dos seus sonhos.</p>
+                    <p>Liderada por engenheiros e arquitetos com mais de 10 anos de experiência, somos reconhecidos pela transparência e compromisso com prazos. Oferecemos soluções completas: crédito, projetos e construções.</p>
+                    <p>Nosso diferencial? Somos especialistas em construções financiadas. Parceiros dos principais bancos, garantimos taxas reduzidas e condições exclusivas.</p>
+                    <a href="#formulario" class="btn-secondary">Solicitar meu projeto →</a>
+                </div>
+                <div class="about-images">
+                    <div class="about-image"></div>
+                    <div class="about-image"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <div class="container">
+            <h2>Quer falar com um especialista?</h2>
+            <p>Fale agora com nosso time de especialistas em financiamento e construção.</p>
+            <p>A Angularity está aqui para realizar o seu sonho de forma clara e segura.</p>
+            <a href="#formulario" class="btn-blue">Falar com especialista no WhatsApp →</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Angularity Empreendimentos - Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        // Funcionalidade do carrossel de depoimentos
+        const carousel = document.querySelector('.testimonials-carousel');
+        const dots = document.querySelectorAll('.carousel-dot');
+        
+        if (carousel && dots.length > 0) {
+            // Atualiza dots ao rolar
+            carousel.addEventListener('scroll', () => {
+                const scrollLeft = carousel.scrollLeft;
+                const itemWidth = carousel.querySelector('.testimonial-item').offsetWidth + 20;
+                const currentIndex = Math.round(scrollLeft / itemWidth);
+                
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            });
+            
+            // Clique nos dots para navegar
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    const itemWidth = carousel.querySelector('.testimonial-item').offsetWidth + 20;
+                    carousel.scrollTo({
+                        left: itemWidth * index,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        }
+
+        // Funcionalidade do carrossel de cases com efeito empilhado
+        const carouselItems = document.querySelectorAll('.carousel-item');
+        const casesDots = document.querySelectorAll('.cases-dot');
+        let currentIndex = 0;
+
+        function updateCarousel(newIndex) {
+            currentIndex = newIndex;
+            
+            carouselItems.forEach((item, index) => {
+                item.classList.remove('active', 'left', 'right', 'hidden');
+                
+                if (index === currentIndex) {
+                    item.classList.add('active');
+                } else if (index === currentIndex - 1 || (currentIndex === 0 && index === carouselItems.length - 1)) {
+                    item.classList.add('left');
+                } else if (index === currentIndex + 1 || (currentIndex === carouselItems.length - 1 && index === 0)) {
+                    item.classList.add('right');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+            
+            casesDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        // Clique nos dots
+        casesDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                updateCarousel(index);
+            });
+        });
+
+        // Clique nas imagens para navegar
+        carouselItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                if (!item.classList.contains('active')) {
+                    updateCarousel(index);
+                }
+            });
+        });
+
+        // Auto-play (opcional - descomente se quiser)
+        // setInterval(() => {
+        //     updateCarousel((currentIndex + 1) % carouselItems.length);
+        // }, 5000);
+
+        // Navegação por teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                updateCarousel((currentIndex - 1 + carouselItems.length) % carouselItems.length);
+            } else if (e.key === 'ArrowRight') {
+                updateCarousel((currentIndex + 1) % carouselItems.length);
+            }
+        });
+
+        // Suporte touch para mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        const casesCarouselWrapper = document.querySelector('.cases-carousel-wrapper');
+        if (casesCarouselWrapper) {
+            casesCarouselWrapper.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+
+            casesCarouselWrapper.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+
+            function handleSwipe() {
+                if (touchEndX < touchStartX - 50) {
+                    // Swipe left
+                    updateCarousel((currentIndex + 1) % carouselItems.length);
+                }
+                if (touchEndX > touchStartX + 50) {
+                    // Swipe right
+                    updateCarousel((currentIndex - 1 + carouselItems.length) % carouselItems.length);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
